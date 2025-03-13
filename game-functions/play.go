@@ -99,21 +99,24 @@ func (g *gamePlay) MoveRook(coinToss, diceRoll int) bool {
 	if coinToss == 0 { // Heads - move up
 		g.rookRow -= diceRoll
 
+		fmt.Println("in coin toss: ", g.rookRow)
+
 		// hangle edge cases
-		if g.rookRow < 0 {
+		for g.rookRow < 0 {
 			g.rookRow = (g.rookRow + 8) % 8
 		}
 	} else if coinToss == 1 { // tails - move right
 		g.rookCol += diceRoll
 
 		// hangle edge cases
-		if g.rookCol >= 0 {
+		if g.rookCol >= 8 {
 			g.rookCol = g.rookCol % 8
 		}
 	}
 
 	// Check to see if we have captured the Bishop
 	if g.board[g.rookRow][g.rookCol] == "B" {
+		g.board[g.rookRow][g.rookCol] = "R"
 		return true
 	}
 

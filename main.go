@@ -9,7 +9,10 @@ import (
 const max_rounds = 15
 
 func main() {
+	rookGamePlay()
+}
 
+func rookGamePlay() {
 	fmt.Println("Starting Game!")
 
 	gameplay := gamefunctions.NewGamePlay()
@@ -22,6 +25,8 @@ func main() {
 		diceRollResult := gameplay.DiceRoll()
 
 		if gameplay.MoveRook(coinTossResult, diceRollResult) {
+			gameplay.PrintBoard()
+
 			fmt.Println("!!! WINNER !!!")
 			fmt.Println("We have Captured the Bishop!")
 
