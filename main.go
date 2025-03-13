@@ -9,26 +9,70 @@ import (
 const max_rounds = 15
 
 func main() {
-	rookGamePlay()
+	bishopGamePlay()
 }
 
-func rookGamePlay() {
+// func rookGamePlay() {
+// 	fmt.Println("Starting Game!")
+
+// 	gameplay := gamefunctions.NewGamePlay()
+// 	gameplay.PrintBoard()
+
+// 	for i := 1; i <= max_rounds; i++ {
+// 		fmt.Printf("Round %d\n\n", i)
+
+// 		coinTossResult := gameplay.CoinToss()
+// 		diceRollResult := gameplay.DiceRoll()
+
+// 		if gameplay.MoveRook(coinTossResult, diceRollResult) {
+// 			gameplay.PrintBoard()
+
+// 			fmt.Println("!!! Rook Wins !!!")
+// 			fmt.Println("We have Captured the Bishop!")
+
+// 			return
+// 		}
+
+// 		gameplay.PrintBoard()
+// 	}
+
+// 	fmt.Println("You Lose!")
+// }
+
+func bishopGamePlay() {
 	fmt.Println("Starting Game!")
 
 	gameplay := gamefunctions.NewGamePlay()
 	gameplay.PrintBoard()
 
 	for i := 1; i <= max_rounds; i++ {
-		fmt.Printf("Round %d\n", i)
+		fmt.Printf("Round %d\n\n", i)
 
+		println("Rooks Turn\n")
 		coinTossResult := gameplay.CoinToss()
 		diceRollResult := gameplay.DiceRoll()
 
 		if gameplay.MoveRook(coinTossResult, diceRollResult) {
 			gameplay.PrintBoard()
 
-			fmt.Println("!!! WINNER !!!")
+			fmt.Println("!!! Rook Wins !!!")
 			fmt.Println("We have Captured the Bishop!")
+
+			return
+		}
+
+		gameplay.PrintBoard()
+
+		println("Bishops Turn\n")
+
+		directionResult := gameplay.PickDirection()
+		diceRollResult = gameplay.DiceRoll()
+
+		if gameplay.MoveBishop(directionResult, diceRollResult) {
+			gameplay.PrintBoard()
+
+			fmt.Println("!!! Bishop Wins !!!")
+			fmt.Println("We have Captured the Rook!")
 
 			return
 		}
@@ -36,5 +80,5 @@ func rookGamePlay() {
 		gameplay.PrintBoard()
 	}
 
-	fmt.Println("You Lose!")
+	fmt.Println("You Both Lose!")
 }

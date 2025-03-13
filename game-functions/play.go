@@ -5,10 +5,6 @@ import (
 	"math/rand"
 )
 
-const (
-	board_size = 8
-)
-
 func NewGamePlay() GamePlay {
 
 	// Create board on start
@@ -27,9 +23,11 @@ func NewGamePlay() GamePlay {
 	board[5][2] = "B"
 
 	return &gamePlay{
-		board:   board,
-		rookRow: 7,
-		rookCol: 7,
+		board:     board,
+		rookRow:   7,
+		rookCol:   7,
+		bishopRow: 5,
+		bishopCol: 2,
 	}
 }
 
@@ -37,13 +35,23 @@ type GamePlay interface {
 	PrintBoard()
 	CoinToss() int
 	DiceRoll() int
+	PickDirection() int
 	MoveRook(coinToss, diceRoll int) bool
+	MoveBishop(direction, diceRoll int) bool
+	GetBishopRow() int
+	GetBishopCol() int
+	GetRookRow() int
+	GetRookCol() int
 }
 
 type gamePlay struct {
-	board   [][]string
+	board [][]string
+
 	rookRow int
 	rookCol int
+
+	bishopRow int
+	bishopCol int
 }
 
 func (g *gamePlay) PrintBoard() {
@@ -82,12 +90,16 @@ func (g *gamePlay) DiceRoll() int {
 	diceRollResult1 := rand.Intn(6) + 1
 	diceRollResult2 := rand.Intn(6) + 1
 
-	fmt.Printf("The first dice roll result is: %d\n", diceRollResult1)
-	fmt.Printf("The second dice roll result is: %d\n", diceRollResult2)
-
-	fmt.Printf("The total dice roll result is: %d \n", diceRollResult1+diceRollResult2)
+	fmt.Printf("The total dice roll is %d\n", diceRollResult1+diceRollResult2)
 
 	return diceRollResult1 + diceRollResult2
+}
+
+func (g *gamePlay) PickDirection() int {
+	dir := rand.Intn(4)
+	fmt.Printf("The Direction is: %d\n", dir)
+
+	return dir
 }
 
 func (g *gamePlay) MoveRook(coinToss, diceRoll int) bool {
@@ -99,20 +111,21 @@ func (g *gamePlay) MoveRook(coinToss, diceRoll int) bool {
 	if coinToss == 0 { // Heads - move up
 		g.rookRow -= diceRoll
 
-		fmt.Println("in coin toss: ", g.rookRow)
-
-		// hangle edge cases
+		// Handle edge cases
 		for g.rookRow < 0 {
 			g.rookRow = (g.rookRow + 8) % 8
 		}
-	} else if coinToss == 1 { // tails - move right
+	} else if coinToss == 1 { // Tails - move right
 		g.rookCol += diceRoll
 
-		// hangle edge cases
+		// Handle edge cases
 		if g.rookCol >= 8 {
 			g.rookCol = g.rookCol % 8
 		}
 	}
+
+	// Print new coordinates
+	fmt.Printf("New position: %c%d\n", 'a'+g.rookCol, 8-g.rookRow)
 
 	// Check to see if we have captured the Bishop
 	if g.board[g.rookRow][g.rookCol] == "B" {
@@ -126,4 +139,79 @@ func (g *gamePlay) MoveRook(coinToss, diceRoll int) bool {
 	return false
 }
 
-// move bishop // extra
+func (g *gamePlay) MoveBishop(direction, diceRoll int) bool {
+	// Clean up old B
+	g.board[g.bishopRow][g.bishopCol] = "."
+
+	// Find new row/col of B
+	for i := 0; i < diceRoll; i++ {
+		switch direction {
+		case 0: // Top right
+			g.bishopRow--
+			g.bishopCol++
+
+			if g.bishopRow < 0 || g.bishopCol >= 8 { // If we reach the edge of the board, switch direction to the other side
+				g.bishopRow++
+				g.bishopCol--
+				direction = 3
+			}
+		case 1: // Top left
+			g.bishopRow--
+			g.bishopCol--
+
+			if g.bishopRow < 0 || g.bishopCol < 0 {
+				g.bishopRow++
+				g.bishopCol++
+				direction = 2
+			}
+		case 2: // Bottom right
+			g.bishopRow++
+			g.bishopCol++
+
+			if g.bishopRow >= 8 || g.bishopCol >= 8 {
+				g.bishopRow--
+				g.bishopCol--
+				direction = 1
+			}
+		case 3: // Bottom left
+			g.bishopRow++
+			g.bishopCol--
+
+			if g.bishopRow >= 8 || g.bishopCol < 0 {
+				g.bishopRow--
+				g.bishopCol++
+				direction = 0
+			}
+		}
+	}
+	// Print new coordinates
+	fmt.Printf("New position: %c%d\n", 'a'+g.bishopCol, 8-g.bishopRow)
+
+	// Check to see if we have captured the rook
+	if g.board[g.bishopRow][g.bishopCol] == "R" {
+		g.board[g.bishopRow][g.bishopCol] = "B"
+		return true
+	}
+	//Update B
+	g.board[g.bishopRow][g.bishopCol] = "B"
+
+	return false
+}
+
+// Helper functions for testing
+
+func (g *gamePlay) GetBishopRow() int {
+	return g.bishopRow
+}
+
+func (g *gamePlay) GetBishopCol() int {
+	return g.bishopCol
+}
+
+func (g *gamePlay) GetRookRow() int {
+	return g.rookRow
+}
+
+func (g *gamePlay) GetRookCol() int {
+	return g.rookCol
+}

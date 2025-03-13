@@ -33,14 +33,23 @@ will be the number of squares the rook moves.
 3. If the rook reaches the right most column on the board, it emerges again from the
 left most column.
 4. If the rook reaches the top most row, it emerges again from the bottom most row.
-- Move the rook as described above for 15 rounds. If it manages to survive
-from being captured by the bishop, the player with the rook wins. Else the
-player with bishop wins.
-- The starting position for rook is h1 square and bishop remains stationary
-on c3.
+    - Move the rook as described above for 15 rounds. If it manages to survive
+    from being captured by the bishop, the player with the rook wins. Else the
+    player with bishop wins.
+    - The starting position for rook is h1 square and bishop remains stationary
+    on c3.
 
 Write code to determine which player won, given the above constraints. Make sure to
 record (or print) the result of coin toss, dice and rook's position after every move.
 Additionally, please document any assumptions you made that influenced your solution.
 We have intentionally framed this problem to give you latitude in how you solve it, so it’s
 useful to understand your interpretation of the problem.
+
+## How to Play
+
+To play, in the directory, run ```go run main.go```
+
+## Improvements
+
+- board size and number of rounds should be dynamic, this would require user input.
+- add more tests
