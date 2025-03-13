@@ -23,7 +23,10 @@ In the object-oriented language of your choosing
 3. Given a board state, write code to determine whether the rook can capture the
 bishop.
 4. Write code to determine whether the bishop can capture the rook.
-The Problem
+
+
+
+## The Problem
 We decide to move the black rook and play for its survival. The move happens as
 follows:
 1. Toss a coin, if it's heads, the rook moves up. If it's tails, the rook moves to the
@@ -39,6 +42,29 @@ left most column.
     - The starting position for rook is h1 square and bishop remains stationary
     on c3.
 
+
+## Bishop Play Rules
+It's Rook Vs Bishop in this Game! Both players move using a combination of coins/die.
+
+The Rook move happens first as follows: 
+1. Toss a coin, if it's heads, the rook moves up. If it's tails, the rook moves to the
+right.
+2. Roll 2 dice (6 sided). The sum of numbers on the face up side of both the dice
+will be the number of squares the rook moves.
+3. If the rook reaches the right most column on the board, it emerges again from the
+left most column.
+4. If the rook reaches the top most row, it emerges again from the bottom most row.
+
+The Bishop move happens next: 
+1. Roll a speical 4 way die to determine the direction that the bishop will move in. 
+2. Roll 2 dice (6 sided). The sum of numbers on the face up side of both the dice
+will be the number of squares the bishop moves.
+3. If the Bishop reaches the edge of the board, it emerges again from the opposite side.
+
+The Rook and Bishop take turns until someone has won, or all 15 turn are up. 
+
+
+## Task
 Write code to determine which player won, given the above constraints. Make sure to
 record (or print) the result of coin toss, dice and rook's position after every move.
 Additionally, please document any assumptions you made that influenced your solution.
@@ -53,3 +79,4 @@ To play, in the directory, run ```go run main.go```
 
 - board size and number of rounds should be dynamic, this would require user input.
 - add more tests
+- a nicer UI
